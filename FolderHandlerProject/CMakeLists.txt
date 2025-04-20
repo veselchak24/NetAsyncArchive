@@ -3,4 +3,17 @@ project(FolderHandlerProject)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(FolderHandlerProject main.cpp)
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
+
+add_executable(FolderHandlerProject main.cpp
+        pathUtils.h
+        SocketQueue.h
+        pathUtils.cpp
+        SocketQueue.cpp)
+
+target_link_libraries(FolderHandlerProject PRIVATE ws2_32)
+
+find_package(unofficial-concurrentqueue CONFIG REQUIRED)
+target_link_libraries(FolderHandlerProject PRIVATE unofficial::concurrentqueue::concurrentqueue)
+
+set(CMAKE_EXE_LINKER_FLAGS "-static")

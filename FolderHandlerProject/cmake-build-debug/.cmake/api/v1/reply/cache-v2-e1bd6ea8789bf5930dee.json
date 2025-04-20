@@ -703,7 +703,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "P:/Programs/JetBrains/CLion 2024.3/bin/ninja/win/x64/ninja.exe"
+			"value" : "P:/Programs/JETBRA~1/CLion 2024.3/bin/ninja/win/x64/ninja.exe"
 		},
 		{
 			"name" : "CMAKE_MODULE_LINKER_FLAGS",
@@ -1615,7 +1615,7 @@
 				}
 			],
 			"type" : "PATH",
-			"value" : "unofficial-concurrentqueue_DIR-NOTFOUND"
+			"value" : "C:/Users/anopk/.vcpkg-clion/vcpkg/installed/x64-windows/share/unofficial-concurrentqueue"
 		}
 	],
 	"kind" : "cache",

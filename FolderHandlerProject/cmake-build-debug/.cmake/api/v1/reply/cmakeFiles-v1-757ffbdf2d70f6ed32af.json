@@ -226,11 +226,11 @@
 		},
 		{
 			"isExternal" : true,
-			"path" : "C:/Users/anopk/.vcpkg-clion/vcpkg/installed/x64-mingw-dynamic/share/unofficial-concurrentqueue/unofficial-concurrentqueue-config.cmake"
+			"path" : "C:/Users/anopk/.vcpkg-clion/vcpkg/installed/x64-windows/share/unofficial-concurrentqueue/unofficial-concurrentqueue-config.cmake"
 		},
 		{
 			"isExternal" : true,
-			"path" : "C:/Users/anopk/.vcpkg-clion/vcpkg/installed/x64-mingw-dynamic/share/unofficial-concurrentqueue/unofficial-concurrentqueue-targets.cmake"
+			"path" : "C:/Users/anopk/.vcpkg-clion/vcpkg/installed/x64-windows/share/unofficial-concurrentqueue/unofficial-concurrentqueue-targets.cmake"
 		}
 	],
 	"kind" : "cmakeFiles",

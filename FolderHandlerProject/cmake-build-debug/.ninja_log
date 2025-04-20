@@ -1,3 +1,13 @@
 # ninja log v6
-2	627	7668587889905510	CMakeFiles/FolderHandlerProject.dir/main.cpp.obj	f2a42da72ead8793
-629	1625	7668587896185446	FolderHandlerProject.exe	64ccd90d36edf7ed
+8	3283	7668685135938978	CMakeFiles/FolderHandlerProject.dir/main.cpp.obj	7778cdce8caf51f9
+10	2753	7668683646754118	CMakeFiles/FolderHandlerProject.dir/SocketQueue.cpp.obj	4c38516e1f33aaf4
+10	2743	7668686927396546	FolderHandlerProject.exe	19a0aea933fe605a
+7	1386	7668669426149426	CMakeFiles/FolderHandlerProject.dir/pathUtils.cpp.obj	956c571c0111be02
+3	327	7668687961611404	build.ninja	acac7034e743285
+5	407	7668687961611404	build.ninja	acac7034e743285
+9	2806	7668689265563105	CMakeFiles/FolderHandlerProject.dir/SocketQueue.cpp.obj	4c38516e1f33aaf4
+2807	5144	7668689293535819	FolderHandlerProject.exe	19a0aea933fe605a
+9	2998	7668690846039487	CMakeFiles/FolderHandlerProject.dir/SocketQueue.cpp.obj	4c38516e1f33aaf4
+3028	5478	7668690876229382	FolderHandlerProject.exe	19a0aea933fe605a
+8	2819	7668690994315018	CMakeFiles/FolderHandlerProject.dir/SocketQueue.cpp.obj	4c38516e1f33aaf4
+2820	5250	7668691022439157	FolderHandlerProject.exe	19a0aea933fe605a
