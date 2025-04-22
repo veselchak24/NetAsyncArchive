@@ -38,20 +38,23 @@ void Client::connectToServer(const char* ip, const unsigned int port) {
         throw std::runtime_error("Failed to connect to server");
 }
 
-std::string Client::receiveData() const {
+char* Client::receiveData(size_t& bufferSize) const {
     if (!this->isConnected())
         throw std::runtime_error("Client is not connected to server");
 
     // receive buffer size - 4 bytes int
-    int bufferSize;
     recv(this->_socket, reinterpret_cast<char*>(&bufferSize), sizeof(bufferSize), 0);
 
-    char buffer[bufferSize];
+    if (bufferSize == 0)
+        return nullptr;
+
+    char* buffer = new char[bufferSize];
     const size_t bytes = recv(this->_socket, buffer, bufferSize, 0);
-    if (bytes > 0)
-        return {buffer, bytes};
+
+    if (bytes != bufferSize)
+        throw std::runtime_error("Failed to receive data from server");
     else
-        return {};
+        return buffer;
 }
 
 void Client::sendData(const char* buffer, const int bufferSize) const {
@@ -60,6 +63,9 @@ void Client::sendData(const char* buffer, const int bufferSize) const {
 
     if (bufferSize <= 0)
         throw std::runtime_error("Buffer size must be greater than zero");
+
+    if (send(this->_socket, reinterpret_cast<const char*>(&bufferSize), sizeof(bufferSize), 0) == SOCKET_ERROR)
+        throw std::runtime_error("Failed to send bufferSize to server");
 
     if (send(this->_socket, buffer, bufferSize, 0) == SOCKET_ERROR)
         throw std::runtime_error("Failed to send data");

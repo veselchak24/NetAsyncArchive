@@ -5,24 +5,24 @@
 #include <winsock2.h>
 
 class Client {
-
     SOCKET _socket;
     bool _isInitialized;
-public:
 
+public:
     Client();
 
     ~Client();
 
-    void connectToServer(const char *ip, unsigned int port);
+    void connectToServer(const char* ip, unsigned int port);
 
-    std::string receiveData() const;
+    char* receiveData(size_t& bufferSize) const;
 
-    void sendData(const char *buffer, int bufferSize) const;
+    void sendData(const char* buffer, int bufferSize) const;
 
     void disconnectFromServer() const;
+
 private:
-    bool isConnected() const noexcept {return this->_socket!=INVALID_SOCKET;}
+    bool isConnected() const noexcept { return this->_socket != INVALID_SOCKET; }
 };
 
 

@@ -56,19 +56,19 @@ build CMakeFiles/FolderHandlerProject.dir/main.cpp.obj: CXX_COMPILER__FolderHand
   OBJECT_DIR = CMakeFiles\FolderHandlerProject.dir
   OBJECT_FILE_DIR = CMakeFiles\FolderHandlerProject.dir
 
-build CMakeFiles/FolderHandlerProject.dir/pathUtils.cpp.obj: CXX_COMPILER__FolderHandlerProject_unscanned_Debug P$:/Projects/C++/NetAsyncArchive/FolderHandlerProject/pathUtils.cpp || cmake_object_order_depends_target_FolderHandlerProject
-  DEP_FILE = CMakeFiles\FolderHandlerProject.dir\pathUtils.cpp.obj.d
+build CMakeFiles/FolderHandlerProject.dir/utils.cpp.obj: CXX_COMPILER__FolderHandlerProject_unscanned_Debug P$:/Projects/C++/NetAsyncArchive/FolderHandlerProject/utils.cpp || cmake_object_order_depends_target_FolderHandlerProject
+  DEP_FILE = CMakeFiles\FolderHandlerProject.dir\utils.cpp.obj.d
   FLAGS = -g -DDEBUG -std=gnu++20 -fdiagnostics-color=always
   INCLUDES = -isystem C:/Users/anopk/.vcpkg-clion/vcpkg/installed/x64-windows/include
   OBJECT_DIR = CMakeFiles\FolderHandlerProject.dir
   OBJECT_FILE_DIR = CMakeFiles\FolderHandlerProject.dir
 
-build CMakeFiles/FolderHandlerProject.dir/SocketQueue.cpp.obj: CXX_COMPILER__FolderHandlerProject_unscanned_Debug P$:/Projects/C++/NetAsyncArchive/FolderHandlerProject/SocketQueue.cpp || cmake_object_order_depends_target_FolderHandlerProject
-  DEP_FILE = CMakeFiles\FolderHandlerProject.dir\SocketQueue.cpp.obj.d
+build CMakeFiles/FolderHandlerProject.dir/Server/Server.cpp.obj: CXX_COMPILER__FolderHandlerProject_unscanned_Debug P$:/Projects/C++/NetAsyncArchive/FolderHandlerProject/Server/Server.cpp || cmake_object_order_depends_target_FolderHandlerProject
+  DEP_FILE = CMakeFiles\FolderHandlerProject.dir\Server\Server.cpp.obj.d
   FLAGS = -g -DDEBUG -std=gnu++20 -fdiagnostics-color=always
   INCLUDES = -isystem C:/Users/anopk/.vcpkg-clion/vcpkg/installed/x64-windows/include
   OBJECT_DIR = CMakeFiles\FolderHandlerProject.dir
-  OBJECT_FILE_DIR = CMakeFiles\FolderHandlerProject.dir
+  OBJECT_FILE_DIR = CMakeFiles\FolderHandlerProject.dir\Server
 
 
 # =============================================================================
@@ -78,7 +78,7 @@ build CMakeFiles/FolderHandlerProject.dir/SocketQueue.cpp.obj: CXX_COMPILER__Fol
 #############################################
 # Link the executable FolderHandlerProject.exe
 
-build FolderHandlerProject.exe: CXX_EXECUTABLE_LINKER__FolderHandlerProject_Debug CMakeFiles/FolderHandlerProject.dir/main.cpp.obj CMakeFiles/FolderHandlerProject.dir/pathUtils.cpp.obj CMakeFiles/FolderHandlerProject.dir/SocketQueue.cpp.obj
+build FolderHandlerProject.exe: CXX_EXECUTABLE_LINKER__FolderHandlerProject_Debug CMakeFiles/FolderHandlerProject.dir/main.cpp.obj CMakeFiles/FolderHandlerProject.dir/utils.cpp.obj CMakeFiles/FolderHandlerProject.dir/Server/Server.cpp.obj
   FLAGS = -g -DDEBUG
   LINK_FLAGS = -static
   LINK_LIBRARIES = -lws2_32  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
