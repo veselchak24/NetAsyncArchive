@@ -27,7 +27,7 @@ int main(const int argc, const char** argv) {
 #endif
 
     SocketQueue queue(files.begin(), files.size());
-    queue.start("127.0.0.1", 12345);
+    queue.start("127.0.0.1", 1234);
 
     std::this_thread::sleep_for(std::chrono::seconds(3));
 
