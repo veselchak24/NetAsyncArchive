@@ -1,5 +1,10 @@
 ﻿#include "Server.h"
+
 #include <stdexcept>
+
+#ifdef DEBUG
+#include <iostream>
+#endif
 
 Server::Server() : _listenSocket(INVALID_SOCKET), _isRunning(false) {
     WSADATA wsaData;
@@ -9,19 +14,14 @@ Server::Server() : _listenSocket(INVALID_SOCKET), _isRunning(false) {
 
 Server::~Server() {
     if (this->_isRunning)
-    {
         this->stop();
-        WSACleanup();
-    }
+
+    WSACleanup();
 }
 
-void Server::start(const char* ip, const unsigned int port) {
+void Server::start(const char* ip, const uint16_t port) {
     if (this->_isRunning)
-#ifdef DEBUG
         throw std::runtime_error("Server is already running");
-#else
-            return;
-#endif
 
     this->_listenSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     sockaddr_in serverAddress;
@@ -45,16 +45,17 @@ void Server::stop() {
 
     if (closesocket(this->_listenSocket) == SOCKET_ERROR)
         throw std::runtime_error("Failed to close socket");
+
     this->_isRunning = false;
+
+#ifdef DEBUG
+    std::cout << "Server stopped" << std::endl;
+#endif
 }
 
 SOCKET Server::acceptClient() const {
     if (!this->_isRunning)
-#ifdef DEBUG
         throw std::runtime_error("Server is not running");
-#else
-            return INVALID_SOCKET;
-#endif
 
     return accept(this->_listenSocket, nullptr, nullptr);
 }
@@ -64,10 +65,10 @@ bool Server::sendItemToClient(const SOCKET clientSocket, const char* item, const
         throw std::runtime_error("Server is not running");
 
     if (!item)
-        throw std::runtime_error("Item cannot be nullptr");
+        throw std::invalid_argument("Item cannot be nullptr");
 
     if (itemLength < 0)
-        throw std::runtime_error("Item length must be greater than 0");
+        throw std::invalid_argument("Item length must be greater than 0");
 
     // send item length
     const int bytes = send(clientSocket, reinterpret_cast<const char*>(&itemLength), sizeof(itemLength), 0);
@@ -83,8 +84,6 @@ bool Server::sendItemToClient(const SOCKET clientSocket, const char* item, const
 bool Server::receiveItemFromClient(const SOCKET clientSocket, char*& item, int& bufferSize) const {
     if (!this->_isRunning)
         throw std::runtime_error("Server is not running");
-
-    bufferSize = 0;
 
     recv(clientSocket, reinterpret_cast<char*>(&bufferSize), sizeof(bufferSize), MSG_WAITALL);
 

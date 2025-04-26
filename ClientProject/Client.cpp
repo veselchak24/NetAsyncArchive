@@ -19,7 +19,7 @@ Client::~Client() {
         WSACleanup();
 }
 
-void Client::connectToServer(const char* ip, const unsigned int port) {
+void Client::connectToServer(const char* ip, const uint16_t port) {
     if (this->isConnected())
         throw std::runtime_error("Client already connected to server");
 
@@ -53,7 +53,8 @@ char* Client::receiveData(int& bufferSize) const {
         throw std::runtime_error("Client received empty buffer");
 
     char* buffer = new char[bufferSize];
-    recv(this->_socket, buffer, bufferSize, MSG_WAITALL);
+    if (recv(this->_socket, buffer, bufferSize, MSG_WAITALL) != bufferSize)
+        throw std::runtime_error("Failed to receive data from server");
 
     return buffer;
 }
@@ -65,10 +66,10 @@ void Client::sendData(const char* buffer, const int bufferSize) const {
     if (bufferSize <= 0)
         throw std::runtime_error("Buffer size must be greater than zero");
 
-    if (send(this->_socket, reinterpret_cast<const char*>(&bufferSize), sizeof(bufferSize), 0) == SOCKET_ERROR)
+    if (send(this->_socket, reinterpret_cast<const char*>(&bufferSize), sizeof(bufferSize), 0) != sizeof(bufferSize))
         throw std::runtime_error("Failed to send bufferSize to server");
 
-    if (send(this->_socket, buffer, bufferSize, 0) == SOCKET_ERROR)
+    if (send(this->_socket, buffer, bufferSize, 0) != bufferSize)
         throw std::runtime_error("Failed to send data");
 }
 

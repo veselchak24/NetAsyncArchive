@@ -1,5 +1,15 @@
-﻿#ifndef PATHUTILS_H
-#define PATHUTILS_H
+﻿/**
+ * @file utils.h
+ *
+ * @brief Contains supporting functions
+ *
+ * @fn getAllFiles(const std::string& path)
+ * @fn processingInput(int argc, const char** argv, char*& host, int& port, moodycamel::ConcurrentQueue<std::string>& queue)
+ * @fn handleClient(const Server* server, const SOCKET& client, moodycamel::ConcurrentQueue<std::string>* socketQueue)
+ */
+
+#ifndef UTILS_H
+#define UTILS_H
 
 #include <string>
 #include <vector>
@@ -9,43 +19,45 @@
 
 #include <winsock2.h>
 
+/**
+ * @brief Returns a vector of paths to all files in a folder and subfolders
+ *
+ * @param[in] path path to folder for processing
+ *
+ * @throws std::invalid_argument if path is invalid
+ */
 std::vector<std::string> getAllFiles(const std::string& path);
 
-void processingInput(int argc, const char** argv, moodycamel::ConcurrentQueue<std::string>& queue);
+/**
+ * @brief Processing parameters from command line and initialization of variables
+ *
+ * @param[in] argc count of parameters in command line
+ * @param[in] argv array of parameters in command line
+ * @param[out] host address for server connection
+ * @param[out] port port for server connection
+ * @param[out] queue concurrent queue to store file paths
+ *
+ * @throws std::invalid_argument if input parameters are incorrect
+ */
+void processingInput(int argc, const char** argv, char*& host, int& port,
+                     moodycamel::ConcurrentQueue<std::string>& queue);
 
+/**
+ * Processing client requests in a loop.
+ *
+ * Sending file data to client for compression.
+ *
+ * Receiving compressed file data from client.
+ *
+ * Make the compressed file .
+ *
+ * @param server the server object
+ * @param client client socket
+ * @param socketQueue concurrent queue with file paths
+ *
+ * @throws std::invalid_argument if parameters are incorrect
+ */
 void handleClient(const Server* server, const SOCKET& client,
                   moodycamel::ConcurrentQueue<std::string>* socketQueue);
 
-char* getDataFile(const std::string& path, int& bufferSize);
-
-void createCompressedFile(const std::string& path, const char* data, int size);
-
-#ifdef DEBUG
-#include <fstream>
-#include <filesystem>
-
-inline void WriteAllText(const std::string& path, const std::string& text) {
-    if (std::ofstream file(path); file.is_open())
-    {
-        file << text;
-        file.close();
-    } else
-        throw std::runtime_error("Can't create file");
-}
-
-inline void createTestFiles() {
-    if (std::filesystem::exists("testFolder"))
-        std::filesystem::remove_all("testFolder");
-
-    std::filesystem::create_directory("testFolder");
-    for (int i = 0; i < 10; i++)
-    {
-        std::ofstream file("testFolder/file" + std::to_string(i) + ".txt");
-        for (int j = 0; j < 1000000; j++)
-            file << static_cast<char>('A' + rand() % 26);
-        file.close();
-    }
-}
-
-#endif
-#endif //PATHUTILS_H
+#endif //UTILS_H

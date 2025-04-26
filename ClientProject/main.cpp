@@ -3,10 +3,17 @@
 #include "Client.h"
 #include <snappy.h>
 
-int main() {
+int main(const int argc, char* argv[]) {
+    if (argc != 3)
+        throw std::invalid_argument(
+            "Wrong number of arguments. Expected 2: (server ip, port). But was: " + std::to_string(argc-1) + ".");
+
+    const char* server_ip = argv[1];
+    const uint16_t server_port = std::stoi(argv[2]);
+
     Client client;
 
-    client.connectToServer("127.0.0.1", 1234);
+    client.connectToServer(server_ip, server_port);
 
     while (true)
     {
@@ -20,6 +27,7 @@ int main() {
 
         std::string compressedFile;
         snappy::Compress(file, size, &compressedFile);
+        delete[] file;
 
         std::cout << "Sending file of size " << compressedFile.length() << " bytes..." << std::endl;
 

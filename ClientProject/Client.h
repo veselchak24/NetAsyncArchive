@@ -1,6 +1,7 @@
 ﻿#ifndef CLIENT_H
 #define CLIENT_H
 
+#include <cstdint>
 #include <string>
 #include <winsock2.h>
 
@@ -13,7 +14,7 @@ public:
 
     ~Client();
 
-    void connectToServer(const char* ip, unsigned int port);
+    void connectToServer(const char* ip, uint16_t port);
 
     char* receiveData(int& bufferSize) const;
 
