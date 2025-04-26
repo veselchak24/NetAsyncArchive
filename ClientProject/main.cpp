@@ -1,7 +1,7 @@
 ﻿#include <iostream>
 
-#include "Client.h"
 #include <snappy.h>
+#include "Client.h"
 
 int main(const int argc, char* argv[]) {
     if (argc != 3)
