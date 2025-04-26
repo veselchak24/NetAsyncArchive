@@ -10,14 +10,18 @@ int main() {
 
     while (true)
     {
-        size_t size;
-        char* file = client.receiveData(size);
+        int size;
+        const char* file = client.receiveData(size);
 
-        if (size == 0)
+        std::cout << "Received file of size " << size << std::endl;
+
+        if (file == nullptr)
             break;
 
         std::string compressedFile;
         snappy::Compress(file, size, &compressedFile);
+
+        std::cout << "Sending file of size " << compressedFile.length() << " bytes..." << std::endl;
 
         client.sendData(compressedFile.c_str(), compressedFile.length());
     }

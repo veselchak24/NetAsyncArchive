@@ -2,7 +2,6 @@
 #define SERVER_H
 
 #include <winsock2.h>
-#include <string>
 
 class Server {
     SOCKET _listenSocket;
@@ -19,9 +18,9 @@ public:
 
     SOCKET acceptClient() const;
 
-    bool sendItemToClient(SOCKET clientSocket, const char* item, size_t itemLength) const;
+    bool sendItemToClient(SOCKET clientSocket, const char* item, int itemLength) const;
 
-    bool receiveItemFromClient(SOCKET clientSocket, char*& item, size_t& bufferSize) const;
+    bool receiveItemFromClient(SOCKET clientSocket, char*& item, int& bufferSize) const;
 };
 
 #endif //SERVER_H

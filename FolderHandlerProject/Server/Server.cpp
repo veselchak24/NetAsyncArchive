@@ -1,8 +1,4 @@
-﻿//
-// Created by anopk on 22.04.2025.
-//
-
-#include "Server.h"
+﻿#include "Server.h"
 #include <stdexcept>
 
 Server::Server() : _listenSocket(INVALID_SOCKET), _isRunning(false) {
@@ -22,7 +18,7 @@ Server::~Server() {
 void Server::start(const char* ip, const unsigned int port) {
     if (this->_isRunning)
 #ifdef DEBUG
-        throw std::runtime_error("SocketQueue is already running");
+        throw std::runtime_error("Server is already running");
 #else
             return;
 #endif
@@ -45,11 +41,7 @@ void Server::start(const char* ip, const unsigned int port) {
 
 void Server::stop() {
     if (!this->_isRunning)
-#ifdef DEBUG
-        throw std::runtime_error("SocketQueue is not running");
-#else
-            return;
-#endif
+        throw std::runtime_error("Server is not running");
 
     if (closesocket(this->_listenSocket) == SOCKET_ERROR)
         throw std::runtime_error("Failed to close socket");
@@ -59,7 +51,7 @@ void Server::stop() {
 SOCKET Server::acceptClient() const {
     if (!this->_isRunning)
 #ifdef DEBUG
-        throw std::runtime_error("SocketQueue is not running");
+        throw std::runtime_error("Server is not running");
 #else
             return INVALID_SOCKET;
 #endif
@@ -67,7 +59,17 @@ SOCKET Server::acceptClient() const {
     return accept(this->_listenSocket, nullptr, nullptr);
 }
 
-bool Server::sendItemToClient(const SOCKET clientSocket, const char* item, const size_t itemLength) const {
+bool Server::sendItemToClient(const SOCKET clientSocket, const char* item, const int itemLength) const {
+    if (!this->_isRunning)
+        throw std::runtime_error("Server is not running");
+
+    if (!item)
+        throw std::runtime_error("Item cannot be nullptr");
+
+    if (itemLength < 0)
+        throw std::runtime_error("Item length must be greater than 0");
+
+    // send item length
     const int bytes = send(clientSocket, reinterpret_cast<const char*>(&itemLength), sizeof(itemLength), 0);
 
     if (bytes == SOCKET_ERROR)
@@ -75,17 +77,22 @@ bool Server::sendItemToClient(const SOCKET clientSocket, const char* item, const
     if (itemLength == 0)
         return true;
 
-    return send(clientSocket, item, itemLength * sizeof(std::byte), 0) != SOCKET_ERROR;
+    return send(clientSocket, item, itemLength, 0) != SOCKET_ERROR;
 }
 
-bool Server::receiveItemFromClient(const SOCKET clientSocket, char*& item, size_t& bufferSize) const {
+bool Server::receiveItemFromClient(const SOCKET clientSocket, char*& item, int& bufferSize) const {
     if (!this->_isRunning)
-        throw std::runtime_error("SocketQueue is not running");
+        throw std::runtime_error("Server is not running");
 
-    recv(clientSocket, reinterpret_cast<char*>(&bufferSize), sizeof(bufferSize), 0);
+    bufferSize = 0;
+
+    recv(clientSocket, reinterpret_cast<char*>(&bufferSize), sizeof(bufferSize), MSG_WAITALL);
+
+    delete[] item;
+    item = new char[bufferSize];
 
     if (bufferSize == 0)
         throw std::runtime_error("Failed to receive item from client");
 
-    return recv(clientSocket, item, bufferSize, 0) != SOCKET_ERROR;
+    return recv(clientSocket, item, bufferSize, MSG_WAITALL) != SOCKET_ERROR;
 }

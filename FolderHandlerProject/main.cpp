@@ -22,12 +22,21 @@ int main(const int argc, const char** argv) {
 
     server.start("127.0.0.1", 1234);
 
+    std::vector<std::thread> clientsThreads;
+
+    std::thread acceptThread([&] {
+        while (queue.size_approx())
+            if (SOCKET client = server.acceptClient(); client != INVALID_SOCKET)
+                clientsThreads.push_back(std::thread(handleClient, &server, client, &queue));
+    });
+
     while (queue.size_approx())
-    {
-        SOCKET client = server.acceptClient();
-        if (client != INVALID_SOCKET)
-            std::thread(handleClient, server, client, &queue).detach();
-    }
+        std::this_thread::sleep_for(std::chrono::milliseconds(200));
+
+    acceptThread.detach();
+
+    for (auto& clientThread : clientsThreads)
+        clientThread.join();
 
     server.stop();
     return 0;

@@ -15,7 +15,7 @@ public:
 
     void connectToServer(const char* ip, unsigned int port);
 
-    char* receiveData(size_t& bufferSize) const;
+    char* receiveData(int& bufferSize) const;
 
     void sendData(const char* buffer, int bufferSize) const;
 

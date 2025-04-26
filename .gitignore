@@ -1,12 +1,32 @@
-CMakeLists.txt.user
-CMakeCache.txt
-CMakeFiles
-CMakeScripts
-Testing
-Makefile
-cmake_install.cmake
-install_manifest.txt
-compile_commands.json
-CTestTestfile.cmake
-_deps
-*testFolder
+# Игнорирование файлов и директорий сборки для всех проектов
+*/cmake-build-debug/
+*/cmake-build-release/
+*/build/
+*/build.ninja
+*/CMakeFiles/
+*/CMakeCache.txt
+*/cmake_install.cmake
+*/compile_commands.json
+*/.ninja_deps
+*/.ninja_log
+
+# Игнорирование конфигурационных файлов IDE
+.idea/
+.vscode/
+
+# Игнорирование скомпилированных файлов
+*.o
+*.obj
+*.a
+*.so
+*.dylib
+*.dll
+*.exe
+*.out
+*.app
+
+# Игнорирование временных и системных файлов
+*.swp
+*.bak
+*.tmp
+*.log

@@ -39,57 +39,66 @@ void processingInput(const int argc, const char** argv, moodycamel::ConcurrentQu
 #endif
 }
 
-void handleClient(const Server& server, const SOCKET& client,
+void handleClient(const Server* const server, const SOCKET& client,
                   moodycamel::ConcurrentQueue<std::string>* const socketQueue) {
-    char* buffer;
-    size_t bufferSize;
     std::string path;
 
     while (true)
     {
         if (!socketQueue->try_dequeue(path))
         {
-            server.sendItemToClient(client, {}, 0);
+            closesocket(client);
             break;
-        } else
-            buffer = getDataFile(path, bufferSize);
+        }
 
-        if (!server.sendItemToClient(client, buffer, bufferSize))
+        int bufferSize;
+        char* buffer(getDataFile(path, bufferSize));
+
+        if (!server->sendItemToClient(client, buffer, bufferSize))
+        {
+            socketQueue->enqueue(path);
+            closesocket(client);
             break;
+        }
 
-        server.receiveItemFromClient(client, buffer, bufferSize);
+        server->receiveItemFromClient(client, buffer, bufferSize);
 
         const auto indexBackSlash = path.find_last_of('\\');
-        std::string newPath = path.substr(indexBackSlash + 1) + "Compressed" + path.substr(indexBackSlash + 1);
+        std::string newPath = path.substr(0, indexBackSlash + 1) + "Compressed" + path.substr(indexBackSlash + 1);
         createCompressedFile(newPath, buffer, bufferSize);
-    };
+
+        delete[] buffer;
+    }
 }
 
-char* getDataFile(const std::string& path, size_t& bufferSize) {
-    std::ifstream file(path, std::ios::binary | std::ios::ate);
+char* getDataFile(const std::string& path, int& bufferSize) {
+    std::ifstream file(path, std::ios::binary);
 
     if (!file.is_open())
-        throw std::runtime_error("Ошибка открытия файла");
+        throw std::runtime_error("Failed to open file " + path);
 
-    bufferSize = file.tellg();
+    bufferSize = static_cast<int>(std::filesystem::file_size(path));
 
-    file.seekg(0, std::ios::beg);
-
-    auto data = new char[bufferSize];
+    char* data = new char[bufferSize];
     file.read(data, bufferSize);
 
+    file.close();
     return data;
 }
 
-void createCompressedFile(const std::string& path, const char* data, size_t size) {
+void createCompressedFile(const std::string& path, const char* data, const int size) {
     std::ofstream file(path, std::ios::binary | std::ios::ate);
     if (!file.is_open())
-        throw std::runtime_error("Ошибка открытия файла");
+        throw std::runtime_error("Failed to open file " + path);
 
     file.write(data, size);
 
     if (!file.good())
-        throw std::runtime_error("Ошибка записи в файл");
+        throw std::runtime_error("Failed to write to file " + path);
 
     file.close();
+
+#ifdef DEBUG
+    std::cout << "Created compressed file: " << path << std::endl;
+#endif
 }

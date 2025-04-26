@@ -13,12 +13,12 @@ std::vector<std::string> getAllFiles(const std::string& path);
 
 void processingInput(int argc, const char** argv, moodycamel::ConcurrentQueue<std::string>& queue);
 
-void handleClient(const Server& server, const SOCKET& client,
-                  moodycamel::ConcurrentQueue<std::string>* const socketQueue);
+void handleClient(const Server* server, const SOCKET& client,
+                  moodycamel::ConcurrentQueue<std::string>* socketQueue);
 
-char* getDataFile(const std::string& path, size_t& bufferSize);
+char* getDataFile(const std::string& path, int& bufferSize);
 
-void createCompressedFile(const std::string& path, const char* data, size_t size);
+void createCompressedFile(const std::string& path, const char* data, int size);
 
 #ifdef DEBUG
 #include <fstream>
