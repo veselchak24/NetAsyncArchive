@@ -3,7 +3,7 @@
 set(CMAKE_TOOLCHAIN_FILE "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake")
 set(CMAKE_INSTALL_PREFIX "$ENV{VCPKG_ROOT}/installed/x64-mingw-static")
 
-project(FolderHandlerProject)
+project(ServerProject)
 
 set(CMAKE_CXX_STANDARD 20)
 
