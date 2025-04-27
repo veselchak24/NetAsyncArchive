@@ -12,9 +12,9 @@
 class Server {
     /// Server socket
     SOCKET _listenSocket;
+    bool m_isInitialized = false;
 
-    /// Flag of server running
-    bool _isRunning;
+    inline bool isRunning() const { return _listenSocket != INVALID_SOCKET; }
 
 public:
     /**
@@ -26,6 +26,7 @@ public:
 
     ~Server() noexcept;
 
+public:
     /**
      *@brief Start listening server on created socket
      *
@@ -51,36 +52,12 @@ public:
      */
     SOCKET acceptClient() const;
 
-    /**
-     * @brief Send data as array of char to client
-     *
-     * @param clientSocket socket of client to send
-     * @param item array of char to send
-     * @param itemLength size of item
-     *
-     * @return status of sending
-     *
-     * @throws std::runtime_error: If server not running
-     * @throws std::invalid_argument: If put incorrect parameters
-     */
-    bool sendItemToClient(SOCKET clientSocket, const char* item, int itemLength) const;
-
-    /**
-     * @brief Receive data as array of char from client
-     *
-     * @param clientSocket socket of client to receive
-     * @param item array of char to receive. Must be initialized or be nullptr
-     * @param bufferSize size of buffer
-     *
-     * @return status of receiving
-     *
-     * @throws std::runtime_error: If put incorrect parameters
-     */
-    bool receiveItemFromClient(SOCKET clientSocket, char*& item, int& bufferSize) const;
-
     Server(const Server&) = delete;
+
     Server& operator=(const Server&) = delete;
+
     Server(Server&&) = delete;
+
     Server& operator=(Server&&) = delete;
 };
 

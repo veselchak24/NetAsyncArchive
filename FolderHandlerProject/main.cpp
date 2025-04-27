@@ -2,7 +2,7 @@
 
 #include <concurrentqueue/concurrentqueue.h>
 
-#include "utils.h"
+#include "utils/utils.h"
 
 int main(const int argc, const char** argv) {
     char* host;
@@ -30,12 +30,16 @@ int main(const int argc, const char** argv) {
 
     // thread that will accept client for not blocking main thread
     std::thread acceptThread([&clientsThreads, &server, &queue] {
+#ifdef LOG
+        std::cout << "Started accepting clients" << std::endl;
+#endif
+
         while (queue.size_approx())
             if (SOCKET client = server.acceptClient(); client != INVALID_SOCKET)
             {
                 clientsThreads.emplace_back(handleClient, &server, std::ref(client), &queue);
-#ifdef DEBUG
-                std::cout << "Client connected" << std::endl;
+#ifdef LOG
+                std::cout << "Client connected. Thread: " << (--clientsThreads.end())->get_id() << std::endl;
 #endif
             }
     });

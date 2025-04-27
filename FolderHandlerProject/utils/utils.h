@@ -15,7 +15,7 @@
 #include <vector>
 
 #include <concurrentqueue/concurrentqueue.h>
-#include "Server/Server.h"
+#include "../Server/Server.h"
 
 #include <winsock2.h>
 
