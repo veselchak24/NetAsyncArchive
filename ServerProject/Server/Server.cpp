@@ -1,6 +1,7 @@
 ﻿#include "Server.h"
 
 #include <stdexcept>
+#include <string>
 #include <thread>
 
 #ifdef LOG

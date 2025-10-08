@@ -10,15 +10,17 @@ int main(const int argc, const char** argv) {
 
     moodycamel::ConcurrentQueue<std::string> queue{};
 
-    try
-    {
+    try {
         processingInput(argc, argv, host, port, queue);
-    }
-    catch (const std::exception& ex)
-    {
+    } catch (const std::exception& ex) {
         std::cout << "Error: " << ex.what() << std::endl;
         std::cout << "Program needs 3 arguments: \"<host> <port> <path to folder>\"" << std::endl;
         return EXIT_FAILURE;
+    }
+
+    if (!queue.size_approx()) {
+        std::cout << "WARNING: No files to archive in folder!" << std::endl;
+        return 0;
     }
 
     Server server;
@@ -35,8 +37,7 @@ int main(const int argc, const char** argv) {
 #endif
 
         while (queue.size_approx())
-            if (SOCKET client = server.acceptClient(); client != INVALID_SOCKET)
-            {
+            if (SOCKET client = server.acceptClient(); client != INVALID_SOCKET) {
                 clientsThreads.emplace_back(handleClient, &server, std::ref(client), &queue);
 #ifdef LOG
                 std::cout << "Client connected. Thread: " << (--clientsThreads.end())->get_id() << std::endl;
@@ -52,7 +53,7 @@ int main(const int argc, const char** argv) {
     acceptThread.detach();
 
     // join clients threads
-    for (auto& clientThread : clientsThreads)
+    for (auto& clientThread: clientsThreads)
         clientThread.join();
 
     server.stop();

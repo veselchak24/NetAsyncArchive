@@ -1,13 +1,11 @@
 ﻿cmake_minimum_required(VERSION 3.31)
 
 set(CMAKE_TOOLCHAIN_FILE "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake")
-set(CMAKE_INSTALL_PREFIX "$ENV{VCPKG_ROOT}/installed/x64-mingw-static")
 
 project(ServerProject)
 
 set(CMAKE_CXX_STANDARD 20)
 
-#set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DLOG")
 
 add_executable(main main.cpp
