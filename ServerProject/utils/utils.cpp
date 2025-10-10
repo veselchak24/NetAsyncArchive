@@ -76,7 +76,7 @@ std::vector<std::string> getAllFiles(const std::string& path) {
 }
 
 void processingInput(const int argc, const char** const argv, char*& host, int& port,
-                     moodycamel::ConcurrentQueue<std::string>& queue) {
+                     concurrentQueue<std::string>& queue) {
     if (argc != 4) // command, host, port, path
         throw std::invalid_argument(
             "Incorrect number of arguments. Expected 3 (port,host,path). But was:" + std::to_string(argc - 1));
@@ -107,7 +107,7 @@ void processingInput(const int argc, const char** const argv, char*& host, int& 
 }
 
 void handleClient(const Server* const server, const SOCKET& client,
-                  moodycamel::ConcurrentQueue<std::string>* const socketQueue) {
+                  concurrentQueue<std::string>* const socketQueue) {
     if (server == nullptr)
         throw std::invalid_argument("Server is null");
     if (client == INVALID_SOCKET)

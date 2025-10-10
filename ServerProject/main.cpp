@@ -1,14 +1,13 @@
 ﻿#include <iostream>
 
-#include <concurrentqueue/concurrentqueue.h>
-
+#include "SwitchConcurrentQueue.h"
 #include "utils/utils.h"
 
 int main(const int argc, const char** argv) {
     char* host;
     int port;
 
-    moodycamel::ConcurrentQueue<std::string> queue{};
+    concurrentQueue<std::string> queue{};
 
     try {
         processingInput(argc, argv, host, port, queue);

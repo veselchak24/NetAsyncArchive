@@ -14,7 +14,7 @@
 #include <string>
 #include <vector>
 
-#include <concurrentqueue/concurrentqueue.h>
+#include "../SwitchConcurrentQueue.h"
 #include "../Server/Server.h"
 
 #include <winsock2.h>
@@ -40,7 +40,7 @@ std::vector<std::string> getAllFiles(const std::string& path);
  * @throws std::invalid_argument if input parameters are incorrect
  */
 void processingInput(int argc, const char** argv, char*& host, int& port,
-                     moodycamel::ConcurrentQueue<std::string>& queue);
+                     concurrentQueue<std::string>& queue);
 
 /**
  * Processing client requests in a loop.
@@ -58,6 +58,6 @@ void processingInput(int argc, const char** argv, char*& host, int& port,
  * @throws std::invalid_argument if parameters are incorrect
  */
 void handleClient(const Server* server, const SOCKET& client,
-                  moodycamel::ConcurrentQueue<std::string>* socketQueue);
+                  concurrentQueue<std::string>* socketQueue);
 
 #endif //UTILS_H
