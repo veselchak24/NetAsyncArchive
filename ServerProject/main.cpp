@@ -4,6 +4,8 @@
 #include "utils/utils.h"
 
 int main(const int argc, const char** argv) {
+    setlocale(LC_ALL, ".UTF8");
+
     char* host;
     int port;
 
@@ -22,6 +24,13 @@ int main(const int argc, const char** argv) {
         return 0;
     }
 
+    const unsigned int cores = std::thread::hardware_concurrency();
+
+    if (!cores) {
+        std::cout << "Error: Could not get number of cores!" << std::endl;
+        return EXIT_FAILURE;
+    }
+
     Server server;
 
     server.start(host, port);
@@ -30,26 +39,37 @@ int main(const int argc, const char** argv) {
     std::vector<std::thread> clientsThreads;
 
     // thread that will accept client for not blocking main thread
-    std::thread acceptThread([&clientsThreads, &server, &queue] {
+    std::thread acceptThread([&clientsThreads, &server, &queue, &cores] {
 #ifdef LOG
         std::cout << "Started accepting clients" << std::endl;
 #endif
 
+        // counting clients to limit number of clients by cores
+        std::atomic<unsigned int> countClients{0};
+
         while (queue.size_approx())
-            if (SOCKET client = server.acceptClient(); client != INVALID_SOCKET) {
-                clientsThreads.emplace_back(handleClient, &server, std::ref(client), &queue);
+            if (countClients.load() >= cores)
+                continue;
+
+        if (SOCKET client = server.acceptClient(); client != INVALID_SOCKET) {
+            clientsThreads.emplace_back(handleClient, &server, std::ref(client), &queue, std::ref(countClients));
+            ++countClients;
 #ifdef LOG
-                std::cout << "Client connected. Thread: " << (--clientsThreads.end())->get_id() << std::endl;
+            std::cout << '(' << countClients.load() << ')' << " Client connected. Thread: "
+                    << (--clientsThreads.end())->get_id() << std::endl;
 #endif
-            }
+        }
+
+        std::cout << "Stopped accepting clients" << std::endl;
     });
+
+    // detach accept thread to avoid blocking
+    acceptThread.detach();
 
     // wait for  archiving all files
     while (queue.size_approx())
         std::this_thread::sleep_for(std::chrono::milliseconds(200));
 
-    // detach accept thread to avoid blocking
-    acceptThread.detach();
 
     // join clients threads
     for (auto& clientThread: clientsThreads)

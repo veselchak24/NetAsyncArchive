@@ -54,10 +54,11 @@ void processingInput(int argc, const char** argv, char*& host, int& port,
  * @param server the server object
  * @param client client socket
  * @param socketQueue concurrent queue with file paths
+ * @param clientsCount number of connected clients
  *
  * @throws std::invalid_argument if parameters are incorrect
  */
 void handleClient(const Server* server, const SOCKET& client,
-                  concurrentQueue<std::string>* socketQueue);
+                  concurrentQueue<std::string>* socketQueue, std::atomic<unsigned int>& clientsCount);
 
 #endif //UTILS_H

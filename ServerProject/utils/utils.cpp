@@ -107,7 +107,7 @@ void processingInput(const int argc, const char** const argv, char*& host, int& 
 }
 
 void handleClient(const Server* const server, const SOCKET& client,
-                  concurrentQueue<std::string>* const socketQueue) {
+                  concurrentQueue<std::string>* const socketQueue, std::atomic<unsigned int>& clientsCount) {
     if (server == nullptr)
         throw std::invalid_argument("Server is null");
     if (client == INVALID_SOCKET)
@@ -131,6 +131,8 @@ void handleClient(const Server* const server, const SOCKET& client,
             std::cout << "Error: " << ex.what() << std::endl;
 
             socketQueue->enqueue(path);
+
+            --clientsCount;
             break;
         }
     }
